@@ -218,7 +218,14 @@ defmodule ReverseProxyPlug do
         %HTTPoison.AsyncChunk{chunk: chunk} ->
           case Conn.chunk(conn, chunk) do
             {:ok, conn} ->
-              stream_response(conn, opts)
+              stream_response(
+                Conn.assign(
+                  conn,
+                  :resp_body_chunks,
+                  Map.get(conn.assigns, :resp_body_chunks, []) ++ [chunk]
+                ),
+                opts
+              )
 
             {:error, :closed} ->
               conn

@@ -130,6 +130,7 @@ defmodule ReverseProxyPlugTest do
 
     assert conn.status == 200, "passes status through"
     assert {"host", "example.com"} in conn.resp_headers, "passes headers through"
+    assert %{resp_body_chunks: ["Su", "cc", "es", "s"]} == conn.assigns
     assert conn.resp_body == "Success", "passes body through"
   end
 
